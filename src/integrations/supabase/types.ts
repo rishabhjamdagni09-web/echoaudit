@@ -14,7 +14,101 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      analyses: {
+        Row: {
+          ai_summary: string | null
+          audio_format: string | null
+          confidence_score: number | null
+          created_at: string
+          duration_seconds: number | null
+          file_path: string | null
+          filename: string
+          id: string
+          is_ai_generated: boolean | null
+          risk_score: number
+          status: Database["public"]["Enums"]["analysis_status"]
+          transcription: string | null
+          updated_at: string
+        }
+        Insert: {
+          ai_summary?: string | null
+          audio_format?: string | null
+          confidence_score?: number | null
+          created_at?: string
+          duration_seconds?: number | null
+          file_path?: string | null
+          filename: string
+          id?: string
+          is_ai_generated?: boolean | null
+          risk_score?: number
+          status?: Database["public"]["Enums"]["analysis_status"]
+          transcription?: string | null
+          updated_at?: string
+        }
+        Update: {
+          ai_summary?: string | null
+          audio_format?: string | null
+          confidence_score?: number | null
+          created_at?: string
+          duration_seconds?: number | null
+          file_path?: string | null
+          filename?: string
+          id?: string
+          is_ai_generated?: boolean | null
+          risk_score?: number
+          status?: Database["public"]["Enums"]["analysis_status"]
+          transcription?: string | null
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      threats: {
+        Row: {
+          analysis_id: string
+          confidence: number | null
+          created_at: string
+          description: string | null
+          end_index: number | null
+          id: string
+          recommendation: string | null
+          severity: Database["public"]["Enums"]["threat_severity"]
+          start_index: number | null
+          threat_type: string
+        }
+        Insert: {
+          analysis_id: string
+          confidence?: number | null
+          created_at?: string
+          description?: string | null
+          end_index?: number | null
+          id?: string
+          recommendation?: string | null
+          severity?: Database["public"]["Enums"]["threat_severity"]
+          start_index?: number | null
+          threat_type: string
+        }
+        Update: {
+          analysis_id?: string
+          confidence?: number | null
+          created_at?: string
+          description?: string | null
+          end_index?: number | null
+          id?: string
+          recommendation?: string | null
+          severity?: Database["public"]["Enums"]["threat_severity"]
+          start_index?: number | null
+          threat_type?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "threats_analysis_id_fkey"
+            columns: ["analysis_id"]
+            isOneToOne: false
+            referencedRelation: "analyses"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
     }
     Views: {
       [_ in never]: never
@@ -23,7 +117,8 @@ export type Database = {
       [_ in never]: never
     }
     Enums: {
-      [_ in never]: never
+      analysis_status: "safe" | "suspicious" | "danger"
+      threat_severity: "low" | "medium" | "high"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -150,6 +245,9 @@ export type CompositeTypes<
 
 export const Constants = {
   public: {
-    Enums: {},
+    Enums: {
+      analysis_status: ["safe", "suspicious", "danger"],
+      threat_severity: ["low", "medium", "high"],
+    },
   },
 } as const
